@@ -1,5 +1,5 @@
 import SearchBar from './SearchBar';
-import { use, useState } from 'react';
+import { useState } from 'react';
 import { Toaster, toast } from 'react-hot-toast';
 import fetchMovies from './services/movieService';
 import { type Movie } from './types/movie';
