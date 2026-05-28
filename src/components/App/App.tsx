@@ -30,6 +30,10 @@ export default function App() {
     } finally {
       setIsLoading(false);
     }
+
+    if (!hasSearched) {
+      toast.error('No movies found for your request.');
+    }
   }
 
   function closeModal() {
@@ -40,13 +44,6 @@ export default function App() {
   function handleSelect(movie: Movie) {
     setSelectedMovie(movie);
     setIsModalOpen(true);
-  }
-
-  <MovieGrid movies={movies} onSelect={handleSelect} />;
-  {
-    isModalOpen && selectedMovie && (
-      <MovieModal onClose={closeModal} movie={selectedMovie} />
-    );
   }
 
   return (
@@ -61,7 +58,7 @@ export default function App() {
         (movies.length > 0 ? (
           <MovieGrid movies={movies} onSelect={handleSelect} />
         ) : (
-          toast.error('No movies found for your request.')
+          setHasSearched(false)
         ))}
       {isModalOpen && selectedMovie && (
         <MovieModal onClose={closeModal} movie={selectedMovie} />
