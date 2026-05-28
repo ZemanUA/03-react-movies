@@ -10,40 +10,33 @@ import ErrorMessage from '../ErrorMessage/ErrorMessage';
 
 export default function App() {
   const [movies, setMovies] = useState<Movie[]>([]);
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedMovie, setSelectedMovie] = useState<Movie | null>(null);
-  const [hasSearched, setHasSearched] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
 
   async function handleSearch(query: string) {
     try {
-      setHasSearched(false);
       setIsLoading(true);
       setIsError(false);
       const response = await fetchMovies(query);
       setMovies(response);
-      setHasSearched(true);
     } catch {
       toast.error('Error loading your movies');
       setIsError(true);
     } finally {
       setIsLoading(false);
     }
-
-    if (!hasSearched) {
+    if (movies.length === 0) {
       toast.error('No movies found for your request.');
     }
   }
 
   function closeModal() {
-    setIsModalOpen(false);
     setSelectedMovie(null);
   }
 
   function handleSelect(movie: Movie) {
     setSelectedMovie(movie);
-    setIsModalOpen(true);
   }
 
   return (
@@ -54,13 +47,10 @@ export default function App() {
       {isLoading && <Loader />}
       {isError && <ErrorMessage />}
 
-      {hasSearched &&
-        (movies.length > 0 ? (
-          <MovieGrid movies={movies} onSelect={handleSelect} />
-        ) : (
-          setHasSearched(false)
-        ))}
-      {isModalOpen && selectedMovie && (
+      {movies.length > 0 && (
+        <MovieGrid movies={movies} onSelect={handleSelect} />
+      )}
+      {selectedMovie && (
         <MovieModal onClose={closeModal} movie={selectedMovie} />
       )}
     </>
