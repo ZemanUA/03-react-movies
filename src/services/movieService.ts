@@ -1,7 +1,11 @@
 import axios from 'axios';
-import { type MovieResponse } from '../types/movie';
+import { type Movie } from '../types/movie';
+export interface MovieResponse {
+  results: Movie[];
+}
+
 export default async function fetchMovies(query: string) {
-  return await axios.get<MovieResponse>(
+  const response = await axios.get<MovieResponse>(
     `https://api.themoviedb.org/3/search/movie?query=${query}`,
     {
       headers: {
@@ -9,4 +13,5 @@ export default async function fetchMovies(query: string) {
       },
     }
   );
+  return response.data.results;
 }

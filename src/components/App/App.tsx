@@ -18,13 +18,14 @@ export default function App() {
 
   async function handleSearch(query: string) {
     try {
+      setHasSearched(false);
       setIsLoading(true);
       setIsError(false);
       const response = await fetchMovies(query);
-      setMovies(response.data.results);
+      setMovies(response);
       setHasSearched(true);
     } catch {
-      toast.error('Ошибка загрузки фильмов');
+      toast.error('Error loading your movies');
       setIsError(true);
     } finally {
       setIsLoading(false);
@@ -41,7 +42,7 @@ export default function App() {
     setIsModalOpen(true);
   }
 
-  <MovieGrid movie={movies} onSelect={handleSelect} />;
+  <MovieGrid movies={movies} onSelect={handleSelect} />;
   {
     isModalOpen && selectedMovie && (
       <MovieModal onClose={closeModal} movie={selectedMovie} />
@@ -58,7 +59,7 @@ export default function App() {
 
       {hasSearched &&
         (movies.length > 0 ? (
-          <MovieGrid movie={movies} onSelect={handleSelect} />
+          <MovieGrid movies={movies} onSelect={handleSelect} />
         ) : (
           toast.error('No movies found for your request.')
         ))}
